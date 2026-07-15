@@ -30,6 +30,7 @@
   --container: 1200px;
   --radius: 4px;
   --header-h: 84px;
+  --ann-h: 34px;                 /* announcement bar height (refined by JS) */
 
   /* Transitions */
   --ease: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
@@ -194,15 +195,16 @@ h1, h2, h3, h4 {
 /* ---------- 2. Header ---------- */
 .header {
   position: fixed;
-  top: 0; left: 0;
+  top: var(--ann-h, 34px);       /* sits just below the announcement bar on load */
+  left: 0;
   width: 100%;
   z-index: 1000;
   transition: background var(--ease), box-shadow var(--ease), padding var(--ease);
   padding-block: 1rem;
 }
-/* Push header below announcement bar initially via JS-measured offset not needed;
-   announcement scrolls away naturally since header is fixed at top. */
+/* Once the announcement bar has scrolled away, lock the solid header to the top */
 .header.scrolled {
+  top: 0;
   background: var(--black);
   box-shadow: 0 1px 0 rgba(198, 161, 91, 0.15);
   padding-block: 0.6rem;
@@ -346,7 +348,8 @@ body.no-scroll { overflow: hidden; }
   position: relative;
   z-index: 3;
   max-width: 760px;
-  padding-block: calc(var(--header-h) + 2rem) 3rem;
+  /* header height + announcement bar + breathing room, so nothing is clipped */
+  padding-block: calc(var(--header-h) + var(--ann-h, 34px) + 2rem) 3rem;
   color: var(--white);
 }
 .hero__title {
@@ -490,8 +493,6 @@ body.no-scroll { overflow: hidden; }
 .value__title { font-size: 1.7rem; margin-bottom: 0.5rem; color: var(--black); }
 .value__text { color: #4a4a4a; max-width: 34ch; margin-inline: auto; }
 
-/* Thin gold separators between value items on wide screens */
-
 /* ---------- 7. Visit & contact ---------- */
 .visit { background: var(--black); color: var(--white); }
 .visit .section__title { color: var(--white); }
@@ -610,8 +611,6 @@ body.no-scroll { overflow: hidden; }
 /* ============================================================
    RESPONSIVE — mobile-first breakpoints
    ============================================================ */
-
-/* Small phones and up already covered by base styles */
 
 /* ---- Collections: 2 columns on tablets ---- */
 @media (min-width: 640px) {
