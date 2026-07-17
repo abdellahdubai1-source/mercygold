@@ -184,4 +184,41 @@
   attachVideoFallback("heroVideo", ".hero");
   attachVideoFallback("aboutVideo", ".about");
 
+  /* ============================================================
+     7. COLLECTIONS — "View All" toggle
+     Reveals / hides the last two collection cards on the same
+     page (no navigation, no modal). Keeps aria-expanded in sync.
+     ============================================================ */
+  var collectionToggle = document.getElementById("collectionToggle");
+  var extraCards = [
+    document.getElementById("card-05"),
+    document.getElementById("card-06")
+  ].filter(Boolean);
+
+  if (collectionToggle && extraCards.length) {
+    collectionToggle.addEventListener("click", function () {
+      var expanded = collectionToggle.getAttribute("aria-expanded") === "true";
+
+      if (expanded) {
+        // Collapse
+        extraCards.forEach(function (card) {
+          card.classList.remove("card--revealing");
+          card.classList.add("is-collapsed");
+        });
+        collectionToggle.setAttribute("aria-expanded", "false");
+        collectionToggle.textContent = "View All Collections";
+      } else {
+        // Reveal
+        extraCards.forEach(function (card) {
+          card.classList.remove("is-collapsed");
+          card.classList.remove("card--revealing");
+          void card.offsetWidth; // force reflow so the reveal animation replays
+          card.classList.add("card--revealing");
+        });
+        collectionToggle.setAttribute("aria-expanded", "true");
+        collectionToggle.textContent = "Show Less";
+      }
+    });
+  }
+
 })();
