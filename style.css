@@ -380,7 +380,7 @@ body.no-scroll { overflow: hidden; }
 }
 .card {
   position: relative;
-  background: var(--charcoal);
+  background-color: var(--charcoal);
   color: var(--white);
   padding: clamp(2rem, 5vw, 2.75rem);
   border: 1px solid rgba(198, 161, 91, 0.18);
@@ -388,6 +388,39 @@ body.no-scroll { overflow: hidden; }
   overflow: hidden;
   transition: transform var(--ease), border-color var(--ease);
 }
+/* Real jewelry image as card background */
+.card--image {
+  background-size: cover;
+  background-position: center;
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+/* Elegant dark gradient overlay keeps text readable over the image */
+.card--image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 8, 8, 0.30) 0%,
+    rgba(8, 8, 8, 0.55) 48%,
+    rgba(8, 8, 8, 0.88) 100%
+  );
+  z-index: 1;
+  transition: background var(--ease);
+}
+.card--image:hover::after {
+  background: linear-gradient(
+    180deg,
+    rgba(8, 8, 8, 0.20) 0%,
+    rgba(8, 8, 8, 0.48) 48%,
+    rgba(8, 8, 8, 0.85) 100%
+  );
+}
+/* Keep card content above the overlay */
+.card--image > * { position: relative; z-index: 2; }
 /* Subtle CSS decorative pattern (no external images) */
 .card::before {
   content: "";
@@ -397,12 +430,28 @@ body.no-scroll { overflow: hidden; }
   border: 1px solid rgba(198, 161, 91, 0.18);
   border-radius: 50%;
   transition: transform var(--ease);
+  z-index: 2;
 }
 .card:hover {
   transform: translateY(-6px);
   border-color: rgba(198, 161, 91, 0.5);
 }
 .card:hover::before { transform: scale(1.15); }
+
+/* Cards 05 & 06 hidden until "View All Collections" */
+.card.is-collapsed { display: none; }
+/* Smooth reveal when the extra cards are shown */
+@keyframes cardReveal {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: none; }
+}
+.card--revealing { animation: cardReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* "View All Collections" button wrapper */
+.collection__more {
+  text-align: center;
+  margin-top: clamp(2rem, 4vw, 2.75rem);
+}
 
 .card__num {
   font-family: var(--font-head);
@@ -417,7 +466,7 @@ body.no-scroll { overflow: hidden; }
   margin-bottom: 0.6rem;
 }
 .card__text {
-  color: var(--gray);
+  color: rgba(247, 242, 232, 0.82);   /* cream, readable over the image */
   font-size: 0.98rem;
   margin-bottom: 1.75rem;
   max-width: 34ch;
@@ -532,6 +581,27 @@ body.no-scroll { overflow: hidden; }
   margin-bottom: var(--space-sm);
 }
 .cta__text { color: #4a4a4a; margin-bottom: var(--space-md); font-size: 1.05rem; }
+
+/* ---------- 8b. Location / Map ---------- */
+.location { background: var(--ivory); }
+.location__head { margin-bottom: clamp(1.75rem, 4vw, 2.5rem); }
+.location__map {
+  width: 100%;
+  border: 1px solid rgba(8, 8, 8, 0.12);
+  border-radius: var(--radius);
+  overflow: hidden;
+  line-height: 0;                 /* remove iframe baseline gap */
+}
+.location__map iframe {
+  display: block;
+  width: 100%;
+  height: clamp(300px, 42vw, 460px);
+  border: 0;
+}
+.location__actions {
+  margin-top: var(--space-md);
+  text-align: center;
+}
 
 /* ---------- 9. Footer ---------- */
 .footer { background: var(--black); color: var(--gray); padding-block: clamp(3rem, 7vw, var(--space-xl)) 2rem; }
